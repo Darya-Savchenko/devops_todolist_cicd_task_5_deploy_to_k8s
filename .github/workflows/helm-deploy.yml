@@ -37,6 +37,11 @@ jobs:
 
       - uses: actions/download-artifact@v4
         with:
+          name: helm-artifacts
+          path: .
+
+      - uses: actions/download-artifact@v4
+        with:
           name: helm-package
           path: .
 
