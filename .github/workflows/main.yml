@@ -15,6 +15,7 @@ env:
 jobs:
   python-ci:
     runs-on: ubuntu-latest
+    name: Python CI
     defaults:
       run:
         working-directory: ./src
@@ -102,7 +103,8 @@ jobs:
     name: Helm CI
     steps:
 
-    - uses: actions/download-artifact@v4
+    - name: Download helm-artifacts
+      uses: actions/download-artifact@v4
       with:
         name: helm-artifacts
         path: .
@@ -126,6 +128,7 @@ jobs:
         path: ./*.tgz
 
   deploy-helm-development:
+    name: deploy development
     uses: ./.github/workflows/helm-deploy.yml
     needs: [helm-ci, docker-ci]
     secrets: inherit
@@ -135,6 +138,7 @@ jobs:
       helm-release-name: todoapp-development
 
   deploy-helm-staging:
+    name: deploy staging
     uses: ./.github/workflows/helm-deploy.yml
     needs: deploy-helm-development
     secrets: inherit
