@@ -24,6 +24,7 @@ jobs:
   deploy-helm:
     runs-on: ubuntu-latest
     environment: ${{ inputs.environment }}
+    name: deploy ${{ inputs.environment }}
     steps:
       - name: download cluster config
         uses: actions/download-artifact@v4
@@ -35,12 +36,14 @@ jobs:
         with:
           config: ./cluster.yml
 
-      - uses: actions/download-artifact@v4
+      - name: download helm-artifacts
+        uses: actions/download-artifact@v4
         with:
           name: helm-artifacts
           path: .
 
-      - uses: actions/download-artifact@v4
+      - name: download helm-package
+        uses: actions/download-artifact@v4
         with:
           name: helm-package
           path: .
@@ -51,11 +54,13 @@ jobs:
       - name: Set up Kubectl
         uses: azure/setup-kubectl@v4
 
-      - uses: azure/login@v2
+      - name: Azure login
+        uses: azure/login@v2
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      - uses: azure/aks-set-context@v3
+      - name: Azure set context
+        uses: azure/aks-set-context@v3
         with:
           cluster-name: ${{ vars.AZURE_CLUSTER_NAME }}
           resource-group: ${{ vars.AZURE_RESOURCE_GROUP }}
